@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Get Image Every Day</title>
+
+    <style>
+        @font-face {
+            font-family: call-me-maybe;
+            src: url("call-me-maybe.ttf");
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas">
+        Not supported
+    </canvas>
+    <br>
+    <a href="" id="link">Download</a>
+
+    <script type = "text/javascript" >
+        // JavaScript program to illustrate 
+        // calculation of no. of days between two date 
+    
+        // To set two dates to two variables
+        var date1 = new Date("09/15/2021");
+        var date2 = new Date();
+        
+        // To calculate the time difference of two dates
+        var Difference_In_Time = date2.getTime() - date1.getTime();
+        
+        // To calculate the no. of days between two dates
+        var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24)) + 1;
+    </script>
+
+    <script type="text/javascript">
+        // base constants
+        const canvasWidth = 400;
+        const canvasHeight = 60;
+        const imageGap = 5;
+        const fontSize = canvasHeight - 20;
+        let f = new FontFace("call-me-maybe", 'url("call-me-maybe.ttf")');
+
+        // create canvas with width and heigth
+        var canvas = document.querySelector("canvas#canvas");
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
+        f.load().then(function() {
+            function drawImages(src) {
+                context = canvas.getContext("2d");
+                var img = new Image();
+                img.src = src;
+                img.onload = function() {
+                    context.drawImage(img, 0, imageGap, canvasHeight - (imageGap * 2), canvasHeight - (imageGap * 2));
+                    context.drawImage(img, canvasWidth - (canvasHeight - (imageGap * 2)), imageGap, canvasHeight - (imageGap * 2), canvasHeight - (imageGap * 2));
+                }
+            }
+
+            function drawText(text) {
+                context = canvas.getContext("2d");
+                context.font = fontSize + 'pt "call-me-maybe"';
+                context.fillStyle = "white";
+                context.strokeStyle = "black";
+                var measuredText = context.measureText(text);
+                context.strokeText(text, (canvasWidth / 2) - (measuredText.width / 2), canvasHeight - (imageGap * 2));
+                context.fillText(text, (canvasWidth / 2) - (measuredText.width / 2), canvasHeight - (imageGap * 2));
+            }
+
+            drawText("DAY " + Difference_In_Days);
+            drawImages("sniff.png");
+
+            var image = canvas.toDataURL();
+            // Create a link
+            var aDownloadLink = document.querySelector("#link");
+            // Add the name of the file to the link
+            aDownloadLink.download = 'day.png';
+            // Attach the data to the link
+            aDownloadLink.href = image;
+            aDownloadLink.click();
+        });
+    </script>
+</body>
+</html>
