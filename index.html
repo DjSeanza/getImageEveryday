@@ -19,43 +19,37 @@
     <br>
     <a href="" id="link">Download</a>
 
-    <script type = "text/javascript" >
-        // JavaScript program to illustrate 
-        // calculation of no. of days between two date 
-    
-        // To set two dates to two variables
-        var date1 = new Date("09/15/2021");
-        var date2 = new Date();
+    <script type = "text/javascript" > 
+        var start_date = new Date("09/15/2021");
+        var today = new Date();
         
-        // To calculate the time difference of two dates
-        var Difference_In_Time = date2.getTime() - date1.getTime();
+        var Difference_In_Time = today.getTime() - start_date.getTime();
         
-        // To calculate the no. of days between two dates
         var Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24)) + 1;
     </script>
 
     <script type="text/javascript">
-        // base constants
         const canvasWidth = 400;
         const canvasHeight = 60;
         const imageGap = 5;
         const fontSize = canvasHeight - 20;
-        let f = new FontFace("call-me-maybe", 'url("call-me-maybe.ttf")');
+        let fontFace = new FontFace("call-me-maybe", 'url("call-me-maybe.ttf")');
 
-        // create canvas with width and heigth
         var canvas = document.querySelector("canvas#canvas");
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
-        f.load().then(function() {
-            function drawImages(src) {
+        fontFace.load().then(function() {
+            function drawImages(src, gapX, gapY, x, y) {
                 context = canvas.getContext("2d");
                 var img = new Image();
-                img.src = src;
+                
                 img.onload = function() {
-                    context.drawImage(img, 0, imageGap, canvasHeight - (imageGap * 2), canvasHeight - (imageGap * 2));
-                    context.drawImage(img, canvasWidth - (canvasHeight - (imageGap * 2)), imageGap, canvasHeight - (imageGap * 2), canvasHeight - (imageGap * 2));
+                    context.drawImage(img, gapX, gapY, x, y);
+                    img.crossOrigin = "anonymous";
                 }
+
+                img.src = src;
             }
 
             function drawText(text) {
@@ -68,17 +62,14 @@
                 context.fillText(text, (canvasWidth / 2) - (measuredText.width / 2), canvasHeight - (imageGap * 2));
             }
 
-            drawText("DAY 10000");
-            drawImages("sniff.png");
+            drawImages("sniff.png", 0, imageGap, canvasHeight - (imageGap * 2), canvasHeight - (imageGap * 2));
+            drawImages("sniff.png", canvasWidth - (canvasHeight - (imageGap * 2)), imageGap, canvasHeight - (imageGap * 2), canvasHeight - (imageGap * 2));
+            drawText("DAY " + Difference_In_Days);
 
-            var image = canvas.toDataURL();
-            // Create a link
-            var aDownloadLink = document.querySelector("#link");
-            // Add the name of the file to the link
-            aDownloadLink.download = 'day.png';
-            // Attach the data to the link
-            aDownloadLink.href = image;
-            aDownloadLink.click();
+            var link = document.querySelector('#link');
+            link.setAttribute('download', 'day.png');
+            link.setAttribute('href', canvas.toDataURL("image/png"));
+            link.click();
         });
     </script>
 </body>
