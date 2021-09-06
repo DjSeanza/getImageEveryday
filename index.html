@@ -18,6 +18,8 @@
     </canvas>
     <br>
     <a href="" id="link">Download</a>
+    <br>
+    <img id="image" src="" alt="">
 
     <script type = "text/javascript" > 
         var start_date = new Date("09/15/2021");
@@ -43,10 +45,10 @@
             function drawImages(src, gapX, gapY, x, y) {
                 context = canvas.getContext("2d");
                 var img = new Image();
+                img.crossOrigin = "anonymous";
                 
                 img.onload = function() {
-                    context.drawImage(img, gapX, gapY, x, y);
-                    img.crossOrigin = "anonymous";
+                    context.drawImage(img, gapX, gapY, x, y);  
                 }
 
                 img.src = src;
@@ -62,14 +64,24 @@
                 context.fillText(text, (canvasWidth / 2) - (measuredText.width / 2), canvasHeight - (imageGap * 2));
             }
 
+            drawText("DAY " + Difference_In_Days);
             drawImages("sniff.png", 0, imageGap, canvasHeight - (imageGap * 2), canvasHeight - (imageGap * 2));
             drawImages("sniff.png", canvasWidth - (canvasHeight - (imageGap * 2)), imageGap, canvasHeight - (imageGap * 2), canvasHeight - (imageGap * 2));
-            drawText("DAY " + Difference_In_Days);
 
-            var link = document.querySelector('#link');
-            link.setAttribute('download', 'day.png');
-            link.setAttribute('href', canvas.toDataURL("image/png"));
-            link.click();
+            setTimeout(function() {
+                var link = document.querySelector('#link');
+                link.setAttribute('href', canvas.toDataURL("image/png"));
+                link.setAttribute('download', 'day.png');
+                link.click();
+            }, 2000)
+
+
+            /* setTimeout(function() {
+                var img = document.querySelector("#image");
+                img.setAttribute("src", canvas.toDataURL("image/png"));
+            }, 2000) */
+            
+            
         });
     </script>
 </body>
